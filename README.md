@@ -1,6 +1,6 @@
 # ePub2Quiz  ✨📖❔✨
 
-The ePub2Quiz web app generates interactive multiple-choice quizzes with text content from EPUB files and is optimized for non-fiction books. The user can upload an EPUB file, display and navigate the file in a reader, and generate quizzes from the content. The quizzes are generated with LLMs by OpenAI and Google. The app is deployed on Digital Ocean's App Platform and uses Digital Ocean Spaces for file storage and Redis for caching and is built with React and Flask.
+The ePub2Quiz web app generates interactive multiple-choice quizzes with text content from EPUB files and is optimized for non-fiction books. The user can upload an EPUB file, display and navigate the file in a reader, and generate quizzes from the content. The quizzes are generated with LLMs by OpenAI and Google. The app is built with React and Flask, deployed on Digital Ocean's App Platform and uses Digital Ocean Spaces for file storage and Redis for caching. For instructions on how to deploy your own ePub2Quiz web app, see below.
 
 **Disclaimer:** This web app is intended for personal use and educational purposes. The models used for quiz generation come with their own cost of use and terms of service, so make sure to check them before using the app yourself.
 
