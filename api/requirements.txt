@@ -1,0 +1,16 @@
+flask
+flask-cors
+gunicorn
+python-dotenv
+boto3
+requests
+openai
+tiktoken
+ebooklib
+bs4
+anthropic
+redis
+google-generativeai
+fix-busted-json
+epubcheck
+nltk

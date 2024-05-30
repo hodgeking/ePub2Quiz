@@ -1,0 +1,27 @@
+.upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.button {
+    background-color: #2089E6;
+    border: none; /* clean look without border */
+    color: white; /* text color */
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    font-size: 15px;
+    cursor: pointer; /* cursor changes to pointing finger when on button */
+    border-radius: 10px; /* rounded corners */
+
+}
+
+.button:hover {
+    background-color: #1e80d9;
+}
+

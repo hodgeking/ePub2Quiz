@@ -1,0 +1,38 @@
+.button {
+    background-color: #2089E6;
+    border: none; /* clean look without border */
+    color: white; /* text color */
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    font-size: 15px;
+    cursor: pointer; /* cursor changes to pointing finger when on button */
+    border-radius: 10px; /* rounded corners */
+
+}
+
+/* inherit from .button */
+.button.close {
+    padding: 2px 7px;
+}
+
+.button:hover {
+    background-color: #1e80d9;
+}
+
+.quiz-tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.quiz-tab {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.quiz-tab.active {
+    background-color: #ddd;
+}
