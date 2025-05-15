@@ -20,7 +20,7 @@ genai.configure(api_key=os.getenv('GAPI'))
 
 
 def prompt_model(text, num_questions=4, options_per_question=4,
-                 difficulty='', model='gpt-3.5-turbo-0125', num_tokens=0, not_valid_max=3, gemini_1_max=30000):
+                 difficulty='', model='gpt-3.5-turbo', num_tokens=0, not_valid_max=3, gemini_1_max=30000):
     """
     Function to generate multiple-choice quizzes with given parameters and text as input. Returns a JSON object with
     the quiz if successful, "split_parts" if the text is too long for the model, and None if the function fails.
