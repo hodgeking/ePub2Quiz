@@ -312,7 +312,7 @@ def generate_quiz():  # server sends ebook url (ebookUrl, hrefs (selectedChapter
 
                 quiz = prompt_model(concatenated_content, int(request.json['numQuestions']), options_per_question=4)
 
-                print('[INFO] used random chapters approach with gpt-3.5')
+                print('[INFO] used random chapters approach with gpt-3.5-turbo-0125')
 
                 if quiz is None:
                     return jsonify({'error': 'server error'}), 500
