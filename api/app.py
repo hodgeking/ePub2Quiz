@@ -110,7 +110,7 @@ def generate_quiz():  # server sends ebook url (ebookUrl, hrefs (selectedChapter
     concatenated_content = ' '.join(content)
 
     # count tokens in the concatenated content
-    enc = tiktoken.encoding_for_model('gpt-3.5-turbo')  # encoding for gpt-5.5-turbo
+    enc = tiktoken.encoding_for_model('gpt-3.5-turbo-0125')  # encoding for gpt-5.5-turbo
     num_tokens = len(enc.encode(concatenated_content))
 
     # change approach if you do not want to use Gemini for too long content
