@@ -117,7 +117,7 @@ def generate_quiz():  # server sends ebook url (ebookUrl, hrefs (selectedChapter
     # approach = 'split_parts'
     # approach = 'random_chapters'
     # approach = 'gpt4'
-    approach = 'gemini'
+    approach = 'random_chapters'
 
     token_limit = 13800  # for chapter content; (total context window of gpt-3.5 is approx 16k tokens, including prompt + output)
     retry_count = 0
