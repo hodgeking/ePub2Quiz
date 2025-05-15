@@ -11,7 +11,7 @@ load_dotenv()
 # cache for text content of chapters
 r = redis.Redis(
     host=os.getenv('REDIS_HOST'),
-    port=15794,
+    port=10618,
     password=os.getenv('REDIS_PW'))
 
 
