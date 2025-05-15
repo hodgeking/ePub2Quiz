@@ -1,3 +1,4 @@
+from io import BytesIO
 import urllib.request
 from ebooklib import epub
 import re
@@ -17,37 +18,39 @@ r = redis.Redis(
 
 def get_content(selected_hrefs, url):
     """
-    Given a list of hrefs and an url, get content of the selected chapters from an EPUB file as a list of strings.
+    Given a list of hrefs and an URL, get content of the selected chapters from an EPUB file as a list of strings.
     """
 
-    # depending on whether a temp file is in there already, we have to use another name (in case of multiple users)
-    temp_file_name = 'temporary_save.epub'
+    # Cache key for the EPUB file itself
+    epub_key = f"epub:{url}"
+    epub_binary = r.get(epub_key)
 
-    for i in range(100):  # while loop would be possible too but im limiting it to 100 epubs at once
-        if os.path.exists(temp_file_name):
-            temp_file_name = f'temporary_save{i}.epub'
-        else:
-            break
+    if epub_binary:
+        print("📦 EPUB cache hit")
+        epub_file = BytesIO(epub_binary)
+    else:
+        print("📥 Downloading EPUB from URL")
+        # Keep retrying to download file until it works
+        while True:
+            try:
+                with urllib.request.urlopen(url) as response:
+                    epub_binary = response.read()
+                r.set(epub_key, epub_binary)  # Cache the EPUB binary data
+                epub_file = BytesIO(epub_binary)
+                break
+            except Exception as e:
+                print(f"Error: {e}")
+                print("Retrying...")
 
-    # keep trying to download file until it works (sometimes it fails due to ContentTooShortError)
-    while True:
-        try:
-            urllib.request.urlretrieve(url, temp_file_name)
-            break
-        except Exception as e:
-            print(f'Error: {e}')
-            print('Trying again...')
-
-    # parse the epub file
-    book = epub.read_epub(temp_file_name)
+    # Parse the EPUB file
+    book = epub.read_epub(epub_file)
 
     # get all hrefs in the order they appear in the TOC
     def extract_hrefs(item):
         # if item is a tuple, it represents a section with its own items
         if isinstance(item, tuple):
-            # first element is the section, second is the list of subsections/items
             section, subsections = item
-            # start with the section's href (if it exists), recursively get hrefs from ssections
+            # start with the section's href (if it exists), recursively get hrefs from subsections
             hrefs = [section.href] if hasattr(section, 'href') else []
             for subitem in subsections:
                 hrefs.extend(extract_hrefs(subitem))
@@ -95,10 +98,9 @@ def get_content(selected_hrefs, url):
         if chapter_content is not None:
             # if content was found in cache, decode it from bytes to string
             chapter_content = chapter_content.decode('utf-8')
-            print(f'cache hit for {key}')
+            print(f'✅ Chapter cache hit for {key}')
         else:
-            print(f'cache missing for {key}')
-
+            print(f'❌ Chapter cache miss for {key}')
             # if href has #, then it is not a separate chapter file, but a part of a chapter
             if '#' in href:
                 chapter = href.split('#')[0]
@@ -136,7 +138,6 @@ def get_content(selected_hrefs, url):
 
                         chapter_content = BeautifulSoup('\n'.join(fragment_content),
                                                         'html.parser').get_text()  # parse html to get text only
-                        # chapter_content = ''.join(fragment_content)  # if we want to keep html tags instead
                         chapter_content = f'\n\n[HREF START:\t{href}\t]' + '\n' + chapter_content + '\n' + f'[HREF END:\t{href}\t]'
             else:  # if we are looking for a chapter that is a separate file already
                 for item in book.get_items():
@@ -144,13 +145,11 @@ def get_content(selected_hrefs, url):
                         content = item.get_content().decode('utf-8')
                         chapter_content = BeautifulSoup(content,
                                                         'html.parser').get_text()  # parse html to get text only
-                        # chapter_content = ''.join(content)  # if we want to keep html tags
                         chapter_content = f'\n\n[HREF START:\t{href}\t]' + '\n' + chapter_content + '\n' + f'[HREF END:\t{href}\t]'
+            # Save chapter content to Redis for future use
             r.set(key, chapter_content)
 
         selected_chapters.append(chapter_content)
 
-    # delete temporary file
-    os.remove(temp_file_name)
-
     return selected_chapters  # list with text of the selected hrefs
+
