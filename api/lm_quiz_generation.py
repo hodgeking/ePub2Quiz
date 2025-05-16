@@ -9,8 +9,10 @@ import fix_busted_json
 load_dotenv()
 
 # openai api key and organization env variables
-openai.organization = os.getenv('OPENAI_ORG')
-openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.organization = 'Token123'
+# os.getenv('OPENAI_ORG')
+openai.api_key = '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'
+# os.getenv('OPENAI_API_KEY')
 
 # encoding to count tokens
 enc = tiktoken.encoding_for_model('gpt-3.5-turbo-0125')
